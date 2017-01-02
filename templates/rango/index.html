@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<!-- load static files -->
+{% load staticfiles %}
+<html>
+	<head>
+		<title> Rango </title>
+	</head>
+	
+	<body>
+	<h1> Rango says.......</h1>
+	<div>
+		Hey there programmer! Don't worry you'll get your GSoC!! <br/>
+	</div>
+
+	<div>
+	{% if categories %}
+		<ul>
+			{% for category in categories %}
+				<li>
+				<a href="/rango/category/{{category.slug}}">{{ category.name }} </a>
+				</li>
+			{% endfor %}
+		</ul>
+		{% else %}
+			<strong> There are no categories present. </strong>
+	{% endif %}
+	</div>
+	
+	
+	<div>
+		<a href="/rango/about/"> About </a>
+		<img src="{% static "images/rango1.jpg" %}" alt="Picture of Rango"/>
+	</div>
+	</body>
+</html>
+

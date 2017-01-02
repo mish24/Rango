@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+	<head> 
+		<title> Boo yah! </title>
+	</head>
+	
+	<body>
+		<h1> About Rango </h1>
+		<div> 
+			This will be displayed automatically and is not controlled
+			by forms or views. Keep this shit in mind.
+			<strong> {{ message }} </strong> <br/>
+		</div>
+		
+		<div>
+		<a href="/rango/"> Go back to index </a>
+		<img src="{% static "images/rango.jpg" %}" />
+		</div>
+		
+		<div>
+			This project has been prepared by Poonam. 
+			When the day goes without writing any javascript framework, 
+			I treat myself with a cup of lemonade.
+			<img src="{{MEDIA_URL}}buttercup.jpg">
+		</div>
+	</body>
+</html>
