@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth import authenticate, login, logout
-
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def index(request):
@@ -118,7 +118,7 @@ def add_category(request):
 		context_dict['form'] = form
 	return render_to_response("rango/add_category.html", context_dict, context)
 """
-@csrf_exempt
+@login_required
 def add_category(request):
     # Get the context from the request.
     context = RequestContext(request)
@@ -234,30 +234,7 @@ def register(request):
 	context_dict['upform'] = upform
 	return render_to_response("rango/register.html", context_dict, context)
 
-@csrf_exempt
-def add_page(request, category_enc_name):
-	context = RequestContext(request)
-	context_dict = {}
-	category_name = category_enc_name.replace('-',' ')
-	context_dict = {'category_name':category_name, 'category_enc_name':category_enc_name}
-	
-	if request.method == "POST":
-		form = PageForm(request.POST)
-		if form.is_valid():
-			page = form.save(commit= False)
-			cat = Category.objects.get(name = category_name)
-			page.category = cat
-			page.views = 0
-			page.save()
-			context_dict["page_success"] = "Page successfully added"
-		else:
-			context_dict["page_error"] = "Page not added."
-	else:
-		form = PageForm()
-	context_dict['form'] = form
-	context_dict['category_name'] = category_name
-	context_dict['category_enc_name'] = category_enc_name
-	return render_to_response("rango/add_page.html", context_dict, context)
+
 		
 	
 @csrf_exempt	
@@ -278,11 +255,51 @@ def user_login(request):
 				return HttpResponse("Your Rango account has been disabled")
 		else:
 			print("Invalid login details: {0},{1}".format(username, password))
-			return HttpResponse("Invalid login details suppiled")
+			return HttpResponse("Invalid login details suppiled. Press the back button and go back")
+			
 	else:
 		#no context variable to pass to the template. hence empty
 		return render_to_response("rango/login.html",{},context)
 
 
-			
+def check_logged_in(request):
+	if request.user.is_authenticated():
+		return HttpResponse("You are logged in")
+	else:
+		return HttpResponse("you are not logged in")
+
+@login_required
+def restricted(request):
+	return HttpResponse("Since you're not loggeed in, you can't see this text!")
+
+@login_required
+def user_logout(request):
+	logout(request)
+	return HttpResponseRedirect('/rango/')
+
+@login_required
+def add_page(request, category_enc_name):
+	context = RequestContext(request)
+	context_dict = {}
+	category_name = category_enc_name.replace('-', ' ')
+	if request.method == "POST":
+		form = PageForm(request.POST)
+		if form.is_valid():
+			page = form.save(commit = False)
+			try:
+				cat = Category_objects.get(name=category_name)
+				page.category = cat
+			except Category.DoesNotExist:
+				return render_to_response("rango/add_page.html", context_dict, context)
+			page.save()
+			return show_categry(request, category_enc_name)
+		else:
+			print(form.errors)
+	else:
+		form = PageForm()
+	context_dict['category_enc_name'] = category_enc_name
+	context_dict['category_name'] = category_name
+	context_dict['form'] = form
+	
+	return render_to_response("rango/add_page.html", context_dict, context)
 	

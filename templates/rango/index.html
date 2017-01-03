@@ -54,8 +54,15 @@
 
 	</div>
 	<a href="/rango/add_category/">Add a new category</a> <br/>
+	<a href="/rango/about/"> About Rango </a> <br/>
+
+	{% if user.is_authenticated %}
+	<a href="/rango/restricted/"> Check restricted </a> <br/>
+	<a href="/rango/logout/"> Logout </a> <br/>
+	{% else %}
 	<a href="/rango/register/"> Register here! </a> <br/>
-	<a href="/rango/login/"> Login </a>
+	<a href="/rango/login/"> Login </a> <br/>
+	{% endif %}
 	</body>
 </html>
 

@@ -16,7 +16,7 @@ import os
 # remember that static files are the ones we add wheras the 
 # medial_dir referss to the directory which enables the people to upload things
 
-BASE_DIR = os.path.dirname(os.path.dirname((__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.join(__file__)))
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
 MEDIA_DIR = os.path.join(BASE_DIR, 'media')
@@ -135,5 +135,6 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+LOGIN_URL = '/rango/login/'
 
 

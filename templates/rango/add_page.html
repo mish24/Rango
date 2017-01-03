@@ -9,10 +9,9 @@
 <body>
 <h1> Add a new page </h1>
 <p style="color:green"> {{ page_success }} </p>
-<p stype="color:red"> {{ page_error }} </p>
 <form id = "page_form" method="POST" action="rango/category/{{category_enc_name}}/add_page/">
 	{% for hidden in form.hidden_fields %}
-	{{ field }}
+	{{ hidden }}
 	{% endfor %}
 	{% for field in form.visible_fields %}
 	{{ field.errors }}
