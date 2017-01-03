@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title> Rango </title>
+</head>
+
+<body>
+	<h1> Register with Rango </h1>
+	{% if registered %}
+	Rango says... <strong> Thank you for registering! </strong>
+	<a href="/rango/"> Return to the homepage. </a> <br/>
+	{% else %}
+	Rango says...<strong> Register here! </strong> <br/>
+	<p style="color:green"> {{ reg_success }} </p>
+	<p style="color:red"> {{ reg_error }} </p>
+	
+	<form id="user_form" method="POST" action="/rango/register/"
+	enctype="multipart/form_data">
+	{% csrf_token %}
+	
+	{{ uform.as_p }}
+	{{ upform.as_p }}
+	
+	<input type="submit" name="submit" value="Register"/>
+	</form>
+	{% endif %}
+	<a href="/rango/"> Back to Index </a>
+</body> 
+
+
+
+
+</html>

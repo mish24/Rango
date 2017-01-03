@@ -1,6 +1,7 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 import uuid
+from django.contrib.auth.models import User
 
 # Create your models here.
 #a category has a name, number of likes and number of visits
@@ -28,7 +29,20 @@ class Page(models.Model):
 	title = models.CharField(max_length = 128)
 	url = models.URLField()
 	views = models.IntegerField(default = 0)
+	#likes = models.IntegerField(default = 0)
 	
 	def __str__(self):
 		return self.title
+
+class UserProfile(models.Model):
+	#links the class to the model instance
+	user = models.OneToOneField(User)
+	website = models.URLField(blank = True)
+	picture = models.ImageField(upload_to='profile_images',blank=True)
+	
+	def __str__(self):
+		return self.user.username
+	
+
+	
 

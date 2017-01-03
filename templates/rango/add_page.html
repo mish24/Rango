@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Rango - Add a Page </title>
+	<h2> Add a page to category: {{category_name}} </h2>
+</head>
+
+
+<body>
+<h1> Add a new page </h1>
+<p style="color:green"> {{ page_success }} </p>
+<p stype="color:red"> {{ page_error }} </p>
+<form id = "page_form" method="POST" action="rango/category/{{category_enc_name}}/add_page/">
+	{% for hidden in form.hidden_fields %}
+	{{ field }}
+	{% endfor %}
+	{% for field in form.visible_fields %}
+	{{ field.errors }}
+	{{ field.help_text }}
+	{{ field }}
+	{% endfor %}
+	
+	<input type="submit" name="Submit" value="Create Page"/>
+	</form>
+<a href="/rango/category/{{category_enc_name}}/"> Back to {{ category_name}} </a>
+</body>
+</html>
+
+	
