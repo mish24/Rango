@@ -10,6 +10,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from datetime import datetime
 
 # Create your views here.
 def index(request):
@@ -25,7 +26,6 @@ def index(request):
 		category.url = category.name.replace(' ', '-')
 	context_dict = {'categories':category_list, 'pages':page_list}
 	
-	
 
 	
 #we access the dictionary list represented by categories by using an object 'category' in html file.
@@ -36,6 +36,7 @@ def index(request):
 
 def about(request):
 	context_dict = {'message': "This will be displayed via form or directly via the views. You do not type this in template"}
+	
 	return render(request, 'rango/about.html', context= context_dict)
 
 
@@ -205,6 +206,10 @@ def register(request):
 """
 @csrf_exempt
 def register(request):
+	#cookies cookies
+	if request.session.test_cookie_worked():
+		print(">>>TEST COOKIE WORKED!")
+		request.sessiom.delete_test_cookie()
 	context = RequestContext(request)
 	context_dict = {}
 #	register_success = True
