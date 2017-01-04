@@ -8,21 +8,28 @@
 
 <body>
 <h1> Add a new page </h1>
-<p style="color:green"> {{ page_success }} </p>
-<form id = "page_form" method="POST" action="rango/category/{{category_enc_name}}/add_page/">
-	{% for hidden in form.hidden_fields %}
-	{{ hidden }}
-	{% endfor %}
-	{% for field in form.visible_fields %}
-	{{ field.errors }}
-	{{ field.help_text }}
-	{{ field }}
-	{% endfor %}
-	
-	<input type="submit" name="Submit" value="Create Page"/>
-	</form>
-<a href="/rango/category/{{category_enc_name}}/"> Back to {{ category_name}} </a>
+<br/>
+<div class="container">
+	{% if not category_enc_name %}
+		<div style="color: red;"> The specified category doesn't exist. </div>
+	{% else %}
+		<form class="span6" id="page_form" method="post" action="/rango/category/{{category_enc_name}}/add_page/">
+		
+		{% for hidden in form.hidden_fields %}
+		{{ hidden }}
+		{% endfor %}
+		{% for field in form.visible_fields %}
+		{{ field.errors }} <br/>
+		{{ field.help_text }} 
+		{{ field }}
+		{% endfor %}
+		<br/>
+		<input class="btn btn-primary" type="submit" name="submit" value="Create Page"/>
+		</form>
+		{% endif %}
+		</div>
+</div>
 </body>
-</html>
+
 
 	

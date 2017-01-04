@@ -11,6 +11,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
+from rango.bing_search import run_query
 
 # Create your views here.
 def index(request):
@@ -282,6 +283,7 @@ def user_logout(request):
 	logout(request)
 	return HttpResponseRedirect('/rango/')
 
+"""
 @login_required
 def add_page(request, category_enc_name):
 	context = RequestContext(request)
@@ -307,4 +309,42 @@ def add_page(request, category_enc_name):
 	context_dict['form'] = form
 	
 	return render_to_response("rango/add_page.html", context_dict, context)
+"""
+
+
+@login_required
+def add_page(request, category_enc_name):
+	context = RequestContext(request)
+	context_dict = {}
+	category_name = category_enc_name.replace('-', ' ')
+	context_dict = {"category_enc_name":category_enc_name, "category_name":category_name}
+	if request.method == 'POST':
+		form = PageForm(request.POST)
+		if form.is_valid():
+			page = form.save(commit = False)
+			cat = Category.objects.get(name = category_name)
+			page.category = cat
+			page.views = 0
+			page.save()
+			return show_category(request, category_enc_name)
+		else:
+			print(form.errors)
+	else:
+		form = PageForm()
+	context_dict = {"category_enc_name":category_enc_name, "category_name": category_name, "form":form}
+	return render_to_response("rango/add_page.html", context_dict, context)
+
+def search(request):
+	context = RequestContext(request)
+	result_list = []
+	if request.method == 'POST':
+		query = request.POST['query'].strip()
+		
+		if query:
+			#run the bing function to get the result
+			result_list = run_query(query)
+		else:
+			return HttpResponse("No results found bro.")
+	return render_to_response("rango/search.html", {"result_list":result_list}, context)
+
 	

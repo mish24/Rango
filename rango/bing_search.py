@@ -1,5 +1,7 @@
 import json
-import urllib, urllib2
+import urllib
+from urllib.error import HTTPError
+from urllib.request import urlopen
 
 def run_query(search_terms):
 	#specify the base
@@ -44,10 +46,11 @@ def run_query(search_terms):
 		json_response = json.loads(response)
 		#loop through each page returned, populating out results list
 		for result in json_response['d']['results']:
-			results.append({'title': result['Title'], 'link':result['Url'], 'summary':result['Description'])}
+			results.append({'title': result['Title'], 'link':result['Url'], 'summary':result['Description']})
 			
-	except urllib.URLError, e:
-		print("Error ocured when querying BING API:", e)
+	except urllib.URLError as e:
+		print("Error ocured when querying BING API:")
+		print(e)
 		
 	return results
 	

@@ -12,6 +12,7 @@ urlpatterns = [
       url(r'^check/$', views.check_logged_in, name='check'),
       url(r'^restricted/$', views.restricted, name='restricted'),
       url(r'^logout/$', views.user_logout, name='logout'),
+      url(r'^search/$', views.search, name = 'search'),
 ]
 
 #IMPORTANT - note that the parameters included in the url are declared in the corresponding view
