@@ -4,7 +4,7 @@ from .models import Category, Page, UserProfile
 from .forms import *
 from django.template import RequestContext
 from django.contrib.auth.models import User
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -39,6 +39,23 @@ def about(request):
 	context_dict = {'message': "This will be displayed via form or directly via the views. You do not type this in template"}
 	
 	return render(request, 'rango/about.html', context= context_dict)
+
+#helper function
+def get_category_list(max_results = 0, starts_with = ' '):
+	cat_list = []
+	if starts_with:
+		cat_list = Category.objects.filter(name__startswith=starts_with)
+	else:
+		cat_list = Category.objects.all()
+	
+	if max_results > 0:
+		if (len(cat_list) > max_results):
+			cat_list = cat_list[:max_results]
+	
+	for cat in cat_list:
+		cat.url = cat.name.replace(' ', '-')
+		
+	return cat_list
 
 
 	
@@ -347,4 +364,38 @@ def search(request):
 			return HttpResponse("No results found bro.")
 	return render_to_response("rango/search.html", {"result_list":result_list}, context)
 
+@login_required
+def profile(request):
+	context = RequestContext(request)
+	cat_list = get_category_list()
+	context_dict = {}
+	#retrieve the user, then the profile of the user through the user, create a context_dict and pass it to the template. your wish to show the categories or not. i won't7
+	u = User.objects.get(username = request.user)
 	
+	try:
+		up = UserProfile.objects.get(user = u)
+	except:
+		up = None
+	context_dict['user'] = u
+	context_dict['userprofile'] = up
+	return render_to_response("rango/profile.html", context_dict, context)
+	
+
+#creating the track of how many times a user visits a page through our website
+def track_url(request):
+	context = RequestContext(request)
+	page_id = None
+	#initially we set the id to none. by default we want the url to be the base one. so that it's easier to return a response
+	url = '/rango/'
+	if request.method == 'GET':
+		if 'page_id' in request.GET:
+			page_id = request.GET['page_id']
+			try:
+				page = Page.objects.get(id = page_id)
+				page.views = page.views + 1
+				page.save()
+				url = page.url
+			except:
+				pass
+	return redirect(url)
+#this is an example of HTTP GET request. rango/goto/?page_id=1.

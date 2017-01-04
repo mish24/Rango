@@ -14,6 +14,8 @@
 		<input class="btn btn-primary" type="submit" name="submit" value="Search"/>
 		<br/>
 		</form>
+
+
 		
 		{% if result_list %}
 		<div style="clear: both;">
@@ -28,5 +30,12 @@
 		</div>
 		{% endif %}
 	</div>
+<div>
+{% if cat_list %}
+		<div id="cats">
+			    {% include 'rango/category_list.html' with cat_list=cat_list %}
+		    </div>
+	{% endif %}
+</div>
 </div>
 {% endblock %}

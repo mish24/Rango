@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head> 
+<title> Rango - Profile </title>
+</head>
+
+<body>
+<h1> Profile Information </h1>
+<h2> {{ user.username }} </h2>
+<p> Email: {{ user.email }} </p>
+
+{% if userprofile %}
+<p> Website: <a href="{{userprofile.website }}">{{userprofile.website}} </a> </p>
+<br/>
+{% if userprofile.picture %}
+<img src="{{ userprofile.picture.url}}"/>
+{% endif %}
+{% endif %}
+</body>
+</html>
